@@ -20,6 +20,50 @@ a:hover{text-decoration:underline}
 .logo{font-weight:800;letter-spacing:.2px}
 .nav a{padding:10px 12px;border-radius:10px}
 .nav a[aria-current="page"], .nav a:hover{background:#f6f8ff}
+
+/* === News & Updates Section (Single Column) === */
+.updates {
+  margin-top: 4rem;
+  display: block; /* ensures vertical stacking */
+}
+
+.updates h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.box {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.box h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.box p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.box a {
+  color: #007acc;
+  text-decoration: underline;
+}
+
+
 .site-footer{border-top:1px solid var(--line);margin-top:48px;background:#fff}
 
 .hero{padding:36px 0 18px}
@@ -40,3 +84,18 @@ a:hover{text-decoration:underline}
 .list.compact li{margin:.2em 0}
 .pubs{padding-left:1.2em}
 .contact-card{margin-top:18px;padding:14px;border:1px dashed var(--line);border-radius:12px;background:#fcfcfc}
+
+/* === Profile Photo Styling === */
+.profile-photo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-photo img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #e5e5e5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
