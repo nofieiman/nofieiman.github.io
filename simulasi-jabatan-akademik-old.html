@@ -132,7 +132,7 @@
   <div class="masthead-inner">
     <div class="eyebrow">Simulasi mandiri · Kepmendiktisaintek No. 39/M/KEP/2026</div>
     <h1>Kalkulator Kenaikan Jabatan Akademik Dosen</h1>
-    <p class="sub">Masukkan posisi saat ini, target jenjang, dan portofolio <strong>artikel jurnal</strong> Anda. Alat ini menghitung <strong>kekurangan Angka Kredit (AK)</strong>, memeriksa <strong>proporsi AK penelitian</strong> dan <strong>syarat khusus publikasi</strong> sesuai Petunjuk Teknis Layanan Pengembangan Profesi dan Karier Dosen. Simulasi ini bersifat konservatif: hanya menghitung artikel peer-review journal (tanpa buku, prosiding, HKI, dan lainnya).</p>
+    <p class="sub">Masukkan posisi saat ini, target jenjang, dan portofolio <strong>artikel jurnal</strong> Anda. Alat ini menghitung <strong>kekurangan Angka Kredit (AK)</strong>, memeriksa <strong>proporsi AK penelitian</strong> dan <strong>syarat khusus publikasi</strong> sesuai Petunjuk Teknis Layanan Pengembangan Profesi dan Karier Dosen. Simulasi konservatif: hanya artikel jurnal (tanpa buku, prosiding, HKI).</p>
   </div>
 </header>
 
@@ -143,19 +143,19 @@
   <section class="step" id="step1">
     <div class="step-head"><span class="step-no">LANGKAH 01</span><h2>Posisi &amp; target jenjang</h2></div>
     <div class="step-body">
-      <div class="grid3" style="grid-template-columns:1fr 1fr">
+      <div class="grid3">
         <div class="field">
-          <label for="curPos">Jabatan akademik &amp; AK saat ini</label>
+          <label for="curPos">Jabatan akademik saat ini</label>
           <select id="curPos">
-            <option value="aa|100">Asisten Ahli — AK 100</option>
-            <option value="aa|150">Asisten Ahli — AK 150</option>
-            <option value="l|200" selected>Lektor — AK 200</option>
-            <option value="l|300">Lektor — AK 300</option>
-            <option value="lk|400">Lektor Kepala — AK 400</option>
-            <option value="lk|550">Lektor Kepala — AK 550</option>
-            <option value="lk|700">Lektor Kepala — AK 700</option>
+            <option value="aa">Asisten Ahli</option>
+            <option value="l" selected>Lektor</option>
+            <option value="lk">Lektor Kepala</option>
           </select>
-          <div class="note">Pilih jenjang AK sesuai PAK terakhir. Kelebihan AK di atas basis jenjang diabaikan — mis. Lektor dengan AK 224,5 dihitung mulai dari basis <b style="font-family:var(--mono)">Lektor 200</b>.</div>
+        </div>
+        <div class="field">
+          <label for="curAK">AK kumulatif saat ini</label>
+          <input type="number" id="curAK" value="200" min="0" step="0.5">
+          <div class="note">Sesuai PAK terakhir (mis. Lektor 200 atau 300).</div>
         </div>
         <div class="field">
           <label for="tgtAK">Target jenjang &amp; AK</label>
@@ -319,8 +319,8 @@ function delPub(uid){ pubs = pubs.filter(p=>p.uid!==uid); render(); }
 function fmt(x){ return (Math.round(x*100)/100).toLocaleString("id-ID",{maximumFractionDigits:2}); }
 
 function calc(){
-  const [cur, curAKs] = document.getElementById("curPos").value.split("|");
-  const curAK = parseFloat(curAKs)||0;
+  const cur = document.getElementById("curPos").value;
+  const curAK = Math.max(0, parseFloat(document.getElementById("curAK").value)||0);
   const tgtAK = parseFloat(document.getElementById("tgtAK").value)||0;
   const prop = PROPORSI[cur];
   const gap = Math.max(0, tgtAK - curAK);
@@ -571,14 +571,17 @@ function render(){
 
 /* ============================================================ EVENT */
 function rebuildTargets(){
-  const [cur, curAKs] = document.getElementById("curPos").value.split("|");
-  const base = parseFloat(curAKs)||0;
+  const cur = document.getElementById("curPos").value;
   const sel = document.getElementById("tgtAK");
-  const list = TARGETS[cur].filter(t=>t.ak>base);
+  const list = TARGETS[cur];
   const def = Math.min(1, list.length-1);
   sel.innerHTML = list.map((t,i)=>'<option value="'+t.ak+'" '+(i===def?"selected":"")+'>'+t.label+'</option>').join("");
+  const base = {aa:100,l:200,lk:400}[cur];
+  const curAKel = document.getElementById("curAK");
+  if(!curAKel.dataset.touched) curAKel.value = base;
 }
 document.getElementById("curPos").addEventListener("change", ()=>{rebuildTargets(); render();});
+document.getElementById("curAK").addEventListener("input", e=>{e.target.dataset.touched="1"; render();});
 document.getElementById("tgtAK").addEventListener("change", render);
 document.getElementById("addPub").addEventListener("click", ()=>addPub());
 
